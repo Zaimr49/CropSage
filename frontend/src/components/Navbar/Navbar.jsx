@@ -40,7 +40,8 @@ const NavBar = () => {
 
   return (
     <div className="navbar">
-      <div className="logo">Logo</div>
+      <div className="logo">Crop Sage</div>
+      
       <div className="button-container">
         <Button variant="text" color="default" onClick={() => navigate("/home")}>
           Home
