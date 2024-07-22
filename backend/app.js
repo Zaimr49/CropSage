@@ -10,7 +10,10 @@ app.use(cors());
 
 // Middleware
 app.use(bodyParser.json());
-
+app.get('/', (req, res) => {
+    res.send(`Welcome to Mosaic Vision Backend! Version 16.8`);
+  });
+  
 // Routes
 app.use("/api/auth", authRoutes);
 
