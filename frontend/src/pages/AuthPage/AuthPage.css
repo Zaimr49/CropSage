@@ -242,13 +242,13 @@
   
   .social-container a {
     border: 1px solid #dddddd;
-    border-radius: 50%;
+    border-radius: 20%;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     margin: 0 5px;
     height: 40px;
-    width: 40px;
+    width: 100px;
   }
   
   footer {
