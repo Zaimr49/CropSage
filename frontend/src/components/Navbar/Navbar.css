@@ -1,0 +1,24 @@
+
+  .navbar {
+    display: flex !important;
+    justify-content:end !important;
+    padding: 1rem !important;
+    background-color: #333 !important;
+    color: white !important;
+    width: 100% !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1000 !important;
+    border-radius: 0px 0px 10px 10px;
+  }
+  
+  .navbar button {
+    margin: 0 1rem !important;
+    color: white !important;
+  }
+  
+  body {
+    padding-top: 4rem !important; 
+  }
+  

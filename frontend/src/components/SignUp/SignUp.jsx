@@ -26,7 +26,7 @@ function SignUpForm() {
     const { username, email, password } = state;
 
     try {
-      const response = await axios.post("http://localhost:5001/api/auth/signup", { username, email, password });
+      const response = await axios.post("https://crop-sage-backend.vercel.app/api/auth/signup", { username, email, password });
       alert(`Signup successful! Token: ${response.data.token}`);
       // Save the token or user data in localStorage/sessionStorage if needed
       localStorage.setItem('authToken', response.data.token);
