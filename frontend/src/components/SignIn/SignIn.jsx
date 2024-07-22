@@ -1,15 +1,17 @@
+
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
+import "./SignIn.css";
 
 function SignInForm() {
   const [state, setState] = React.useState({
     email: "",
     password: ""
   });
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
   const navigate = useNavigate();
-
 
   const handleChange = evt => {
     const value = evt.target.value;
@@ -21,16 +23,13 @@ function SignInForm() {
 
   const handleOnSubmit = async evt => {
     evt.preventDefault();
-
     const { email, password } = state;
 
     try {
       const response = await axios.post("https://crop-sage-backend.vercel.app/api/auth/login", { email, password });
       alert(`Login successful! Token: ${response.data.token}`);
-      
-      // Save the token or user data in localStorage/sessionStorage if needed
       localStorage.setItem('authToken', response.data.token);
-      navigate("/home"); // Redirect to homepage
+      navigate("/home");
     } catch (error) {
       console.error("There was an error logging in!", error);
       alert("Login failed. Please check your credentials.");
@@ -65,13 +64,21 @@ function SignInForm() {
           value={state.email}
           onChange={handleChange}
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={state.password}
-          onChange={handleChange}
-        />
+        <div className="password-container">
+          <input
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={state.password}
+            onChange={handleChange}
+          />
+          <span
+            className="password-toggle"
+            onClick={() => setPasswordVisible(!passwordVisible)}
+          >
+            {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
         <a href="#">Forgot your password?</a>
         <button type="submit">Sign In</button>
       </form>

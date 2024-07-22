@@ -1,0 +1,18 @@
+
+   .password-container {
+    position: relative;
+    width: 100%; /* Make sure the container takes up the full width */
+  }
+  
+  .password-container input {
+    width: 100%; /* Ensure the input field takes up the full width */
+    padding-right: 30px; /* Add space for the icon */
+  }
+  
+  .password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    cursor: pointer;
+    transform: translateY(-50%);
+  }

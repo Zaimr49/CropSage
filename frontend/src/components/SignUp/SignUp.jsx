@@ -1,14 +1,17 @@
+
 import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
+import "./SignUp.css";
 function SignUpForm() {
   const [state, setState] = React.useState({
     username: "",
     email: "",
     password: ""
   });
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleChange = evt => {
     const value = evt.target.value;
@@ -17,20 +20,16 @@ function SignUpForm() {
       [evt.target.name]: value
     });
   };
-  const navigate = useNavigate();
-
 
   const handleOnSubmit = async evt => {
     evt.preventDefault();
-
     const { username, email, password } = state;
 
     try {
       const response = await axios.post("https://crop-sage-backend.vercel.app/api/auth/signup", { username, email, password });
       alert(`Signup successful! Token: ${response.data.token}`);
-      // Save the token or user data in localStorage/sessionStorage if needed
       localStorage.setItem('authToken', response.data.token);
-      navigate("/home"); // Redirect to homepage
+      navigate("/home");
     } catch (error) {
       console.error("There was an error signing up!", error);
       alert("Signup failed. Please try again.");
@@ -73,13 +72,21 @@ function SignUpForm() {
           onChange={handleChange}
           placeholder="Email"
         />
-        <input
-          type="password"
-          name="password"
-          value={state.password}
-          onChange={handleChange}
-          placeholder="Password"
-        />
+        <div className="password-container">
+          <input
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            value={state.password}
+            onChange={handleChange}
+            placeholder="Password"
+          />
+          <span
+            className="password-toggle"
+            onClick={() => setPasswordVisible(!passwordVisible)}
+          >
+            {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
         <button type="submit">Sign Up</button>
       </form>
     </div>
