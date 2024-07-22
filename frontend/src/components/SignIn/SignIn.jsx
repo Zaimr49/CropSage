@@ -1,11 +1,15 @@
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 function SignInForm() {
   const [state, setState] = React.useState({
     email: "",
     password: ""
   });
+  const navigate = useNavigate();
+
 
   const handleChange = evt => {
     const value = evt.target.value;
@@ -23,6 +27,10 @@ function SignInForm() {
     try {
       const response = await axios.post("http://localhost:5001/api/auth/login", { email, password });
       alert(`Login successful! Token: ${response.data.token}`);
+      
+      // Save the token or user data in localStorage/sessionStorage if needed
+      localStorage.setItem('authToken', response.data.token);
+      navigate("/home"); // Redirect to homepage
     } catch (error) {
       console.error("There was an error logging in!", error);
       alert("Login failed. Please check your credentials.");

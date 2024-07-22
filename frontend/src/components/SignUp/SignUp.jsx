@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 function SignUpForm() {
   const [state, setState] = React.useState({
@@ -15,6 +17,8 @@ function SignUpForm() {
       [evt.target.name]: value
     });
   };
+  const navigate = useNavigate();
+
 
   const handleOnSubmit = async evt => {
     evt.preventDefault();
@@ -24,6 +28,9 @@ function SignUpForm() {
     try {
       const response = await axios.post("http://localhost:5001/api/auth/signup", { username, email, password });
       alert(`Signup successful! Token: ${response.data.token}`);
+      // Save the token or user data in localStorage/sessionStorage if needed
+      localStorage.setItem('authToken', response.data.token);
+      navigate("/home"); // Redirect to homepage
     } catch (error) {
       console.error("There was an error signing up!", error);
       alert("Signup failed. Please try again.");
