@@ -1,10 +1,13 @@
 import React from "react";
+import axios from "axios";
+
 function SignUpForm() {
   const [state, setState] = React.useState({
-    name: "",
+    username: "",
     email: "",
     password: ""
   });
+
   const handleChange = evt => {
     const value = evt.target.value;
     setState({
@@ -13,20 +16,24 @@ function SignUpForm() {
     });
   };
 
-  const handleOnSubmit = evt => {
+  const handleOnSubmit = async evt => {
     evt.preventDefault();
 
-    const { name, email, password } = state;
-    alert(
-      `You are sign up with name: ${name} email: ${email} and password: ${password}`
-    );
+    const { username, email, password } = state;
 
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: ""
-      });
+    try {
+      const response = await axios.post("http://localhost:5001/api/auth/signup", { username, email, password });
+      alert(`Signup successful! Token: ${response.data.token}`);
+    } catch (error) {
+      console.error("There was an error signing up!", error);
+      alert("Signup failed. Please try again.");
     }
+
+    setState({
+      username: "",
+      email: "",
+      password: ""
+    });
   };
 
   return (
@@ -47,10 +54,10 @@ function SignUpForm() {
         <span>or use your email for registration</span>
         <input
           type="text"
-          name="name"
-          value={state.name}
+          name="username"
+          value={state.username}
           onChange={handleChange}
-          placeholder="Name"
+          placeholder="Username"
         />
         <input
           type="email"
@@ -66,7 +73,7 @@ function SignUpForm() {
           onChange={handleChange}
           placeholder="Password"
         />
-        <button>Sign Up</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );

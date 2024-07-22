@@ -1,9 +1,12 @@
 import React from "react";
+import axios from "axios";
+
 function SignInForm() {
   const [state, setState] = React.useState({
     email: "",
     password: ""
   });
+
   const handleChange = evt => {
     const value = evt.target.value;
     setState({
@@ -12,18 +15,23 @@ function SignInForm() {
     });
   };
 
-  const handleOnSubmit = evt => {
+  const handleOnSubmit = async evt => {
     evt.preventDefault();
 
     const { email, password } = state;
-    alert(`You are login with email: ${email} and password: ${password}`);
 
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: ""
-      });
+    try {
+      const response = await axios.post("http://localhost:5001/api/auth/login", { email, password });
+      alert(`Login successful! Token: ${response.data.token}`);
+    } catch (error) {
+      console.error("There was an error logging in!", error);
+      alert("Login failed. Please check your credentials.");
     }
+
+    setState({
+      email: "",
+      password: ""
+    });
   };
 
   return (
@@ -57,7 +65,7 @@ function SignInForm() {
           onChange={handleChange}
         />
         <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <button type="submit">Sign In</button>
       </form>
     </div>
   );
