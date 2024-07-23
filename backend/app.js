@@ -25,7 +25,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', (req, res) => {
-    res.send(`Welcome to Crop Sage Backend! Version 16.8`);
+    res.send(`Welcome to Crop Sage Backend! `);
 });
 
 // Routes
