@@ -1,6 +1,5 @@
-// routes/auth.js
 const express = require("express");
-const { signup, login } = require("../controllers/authController");
+const { signup, login, googleSignup, googleLogin } = require("../controllers/authController");
 
 const router = express.Router();
 
@@ -9,5 +8,9 @@ router.post("/signup", signup);
 
 // Login Route
 router.post("/login", login);
+
+// Google Routes
+router.post("/googleSignup", googleSignup);
+router.post("/googleLogin", googleLogin);
 
 module.exports = router;

@@ -1,32 +1,28 @@
-
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import {jwtDecode} from "jwt-decode"; // Import using default export
 import "./SignIn.css";
 
-function SignInForm() {
-  const [state, setState] = React.useState({
-    email: "",
-    password: ""
-  });
-  const [passwordVisible, setPasswordVisible] = React.useState(false);
+const SignInForm = () => {
+  const [state, setState] = useState({ email: "", password: "" });
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = evt => {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value
-    });
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setState((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleOnSubmit = async evt => {
+  const handleOnSubmit = async (evt) => {
     evt.preventDefault();
     const { email, password } = state;
 
     try {
-      const response = await axios.post("https://crop-sage-backend.vercel.app/api/auth/login", { email, password });
+      console.log(email, password)
+      const response = await axios.post("http://localhost:5001/api/auth/login", { email, password });
       alert(`Login successful! Token: ${response.data.token}`);
       localStorage.setItem('authToken', response.data.token);
       navigate("/home");
@@ -35,10 +31,25 @@ function SignInForm() {
       alert("Login failed. Please check your credentials.");
     }
 
-    setState({
-      email: "",
-      password: ""
-    });
+    setState({ email: "", password: "" });
+  };
+
+  const handleGoogleLoginSuccess = async (response) => {
+    const decoded = jwtDecode(response.credential);
+    try {
+      const res = await axios.post("http://localhost:5001/api/auth/googleLogin", { token: response.credential });
+      alert(`Login successful! Token: ${res.data.token}`);
+      localStorage.setItem('authToken', res.data.token);
+      navigate("/home");
+    } catch (error) {
+      console.error("Google login error:", error);
+      alert("Google login failed. Please try again.");
+    }
+  };
+
+  const handleGoogleLoginError = (error) => {
+    console.error("Google login error:", error);
+    alert("Google login failed. Please try again.");
   };
 
   return (
@@ -46,27 +57,28 @@ function SignInForm() {
       <form onSubmit={handleOnSubmit}>
         <h1>Sign in</h1>
         <div className="social-container">
-          
-          <a href="#" className="social">
-            <i className="fab fa-google-plus-g" />
-          </a>
-         
+          <GoogleOAuthProvider clientId="767125768562-6g55mtlo8svcj8642fdh4ujbbfq9mls2.apps.googleusercontent.com">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginError}
+            />
+          </GoogleOAuthProvider>
         </div>
         <span>or use your account</span>
         <input
           type="email"
-          placeholder="Email"
           name="email"
           value={state.email}
           onChange={handleChange}
+          placeholder="Email"
         />
         <div className="password-container">
           <input
             type={passwordVisible ? "text" : "password"}
             name="password"
-            placeholder="Password"
             value={state.password}
             onChange={handleChange}
+            placeholder="Password"
           />
           <span
             className="password-toggle"
@@ -80,6 +92,6 @@ function SignInForm() {
       </form>
     </div>
   );
-}
+};
 
 export default SignInForm;
