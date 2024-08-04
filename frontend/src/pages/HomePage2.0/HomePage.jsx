@@ -57,7 +57,7 @@ const HomePage = () => {
 
       {isActive && (
       <div className="plant-based-container123" >
-      <button className={`plant-based-button123 plbutton123 ${isActive ? 'active' : ''}`}>
+      <button className={`plant-based-button plbutton123 ${isActive ? 'active' : ''}`}>
           Plant based
           <div className="icon-1">
             <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" version="1.1" style={{shapeRendering:"geometricPrecision", textRendering:"geometricPrecision", imageRendering:"optimizeQuality", fillRule:"evenodd", clipRule:"evenodd"}} viewBox="0 0 208.52 511.88" xmlnsXlink="http://www.w3.org/1999/xlink">
