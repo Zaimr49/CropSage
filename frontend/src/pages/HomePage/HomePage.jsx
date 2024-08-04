@@ -16,8 +16,7 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the home page of the application.</p>
+      <h1>Welcome to the Crop-Sage</h1>
       
       <div className="input__container">
         <div className="shadow__input"></div>
