@@ -7,6 +7,7 @@ const HomePage = () => {
   const [open, setOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([{ role: "system", content: "Welcome to the chat!" }]);
   const [isActive, setIsActive] = useState(false);
+  const [isActive2, setIsActive2] = useState(false);
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
@@ -19,6 +20,8 @@ const HomePage = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    setIsActive2(!isActive2);
+
 
     console.log('Searching for:', query);
     // Update the chat with the user's query
@@ -51,6 +54,7 @@ const HomePage = () => {
     <div className="home-page">
       <h1>Welcome to the Home Page</h1>
 
+
       {isActive && (
       <div className="plant-based-container123" >
       <button className={`plant-based-button123 plbutton123 ${isActive ? 'active' : ''}`}>
@@ -80,7 +84,11 @@ const HomePage = () => {
 
 
       
-
+      {isActive2 && (
+      <div className="response-text" >
+        <p>HELLO THERE WHAT'S UP</p>
+        </div>
+      )}
 
       
       <div className={`input__container ${isActive ? 'active' : ''}`}>
