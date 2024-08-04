@@ -429,6 +429,7 @@
     transition: all .3s ease-in-out;
   }
 
-  .response-text{
-    background-color: black;
+
+  .chat__container{
+    background-color:rgb(0 0 0/60%);
   }
