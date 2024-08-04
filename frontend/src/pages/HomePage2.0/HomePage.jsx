@@ -84,10 +84,14 @@ const HomePage = () => {
 
 
       
-      {isActive2 && (
-      <div className="response-text" >
-        <p>HELLO THERE WHAT'S UP</p>
+       {isActive2 && (
+      <div className="chat__container">
+      {chatMessages.map((msg, index) => (
+        <div key={index} className={`chat__message ${msg.role}`}>
+          <p>{msg.content}</p>
         </div>
+      ))}
+    </div>
       )}
 
       
