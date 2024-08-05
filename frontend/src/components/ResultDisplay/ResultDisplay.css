@@ -1,0 +1,14 @@
+.result-display {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+    color: #333;
+    font-size: medium;
+  }
+  
