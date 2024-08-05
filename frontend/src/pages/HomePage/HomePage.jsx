@@ -238,6 +238,7 @@ const HomePage = () => {
             className={`plant-based-button plbutton ${
               isActive ? "active" : ""
             }`}
+            onClick={() => window.open("http://localhost:8501/", "_blank")}
           >
             Plant based
             <div className="icon-1">
