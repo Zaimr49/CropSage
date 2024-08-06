@@ -1,55 +1,66 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import "./HomePage.css";
 import axios from "axios";
+import falconLogo from './falcon-lablab.jpg';
 
 const HomePage = () => {
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     { role: "system", content: "Welcome to the chat!" },
   ]);
   const [isActive, setIsActive] = useState(false);
-  const [isActive2, setIsActive2] = useState(false);
+  const [isActive2, setIsActive2] = useState(true);
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
 
-  const handleInput = (e) => {
-    setQuery(e.target.value);
-    setIsActive("active");
+  const handleInput = () => {
+    setIsActive('active');
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setIsActive2(!isActive2);
+    setIsActive2(false); 
 
-    console.log("Searching for:", query);
-    // Update the chat with the user's query
+    if (query.trim() === "") {
+      alert("Please enter your query");
+      return;
+    }
+
     const newMessage = { role: "user", content: query };
     setChatMessages([...chatMessages, newMessage]);
-
-    // Clear the input field
     setQuery("");
 
-    if (query) {
-      axios
-        .post("http://127.0.0.1:5000/predict", {
-          content: query,
-        })
-        .then((response) => {
-          console.log(response.data);
-          setQuery(response.data);
-          setOpen(true);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      setQuery(null);
-    } else {
-      alert("Please enter your query");
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/api/generate", {
+prompt: query,
+      });
+      const assistantMessage = { role: "assistant", content: response.data.response };
+      setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
+    } catch (error) {
+      console.error("Error generating response:", error);
+      const errorMessage = { role: "assistant", content: "An error occurred. Please try again later." };
+      setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
     }
   };
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Simulate loading delay for assistant's response
+    const lastMessage = chatMessages[chatMessages.length - 1];
+    if (lastMessage && lastMessage.role === 'user') {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        // Add assistant's response here
+       
+      }, 2000); // 2 seconds delay  
+    }
+  }, [chatMessages]);
+
 
   return (
     <div className="home-page">
@@ -191,17 +202,28 @@ const HomePage = () => {
 
       <p className="p1">This is the home page of the application.</p>
 
-      {/* {isActive2 && (
+      {isActive && (
       <div className="chat__container">
-      {chatMessages.map((msg, index) => (
-        <div key={index} className={`chat__message ${msg.role}`}>
-          <p>{msg.content}</p>
-        </div>
-      ))}
-    </div>
-      )} */}
+        {chatMessages.map((msg, index) => (
+           <div key={index} className={`chat__message ${msg.role}`}>
+           {msg.role === 'assistant' && (
+             <img src={falconLogo} alt="Assistant Logo" className="assistant-logo" />
+           )}
+           <p>
+             {msg.role === 'user' ? 'You: ' : ' '}
+             {msg.content}
+           </p>
+         </div>
+        ))}
+        {isLoading && (
+          <div className="chat__message loading">
+            <p>Loading...</p>
+          </div>
+        )}
+      </div>
+      )}
 
-      <div className={`input__container ${isActive ? "active" : ""}`}>
+<div className={`input__container ${isActive ? 'active' : ''}`}>
         <div className="shadow__input"></div>
         
         <input
@@ -214,7 +236,7 @@ const HomePage = () => {
           onClick={handleInput}
         />
         <button
-          className="input__button__shadow"
+          className="input_button_shadow"
           type="submit"
           onClick={handleSearch}
         >
@@ -232,8 +254,9 @@ const HomePage = () => {
             ></path>
           </svg>
         </button>
-
-        <div className="plant-based-container">
+      
+        {isActive2 && 
+        (<div className="plant-based-container">
           <button
             className={`plant-based-button plbutton ${
               isActive ? "active" : ""
@@ -364,17 +387,15 @@ const HomePage = () => {
             </div>
           </button>
         </div>
+        )}
       </div>
 
-      <div className="chat__container">
-        {chatMessages.map((msg, index) => (
-          <div key={index} className={`chat__message ${msg.role}`}>
-            <p>{msg.content}</p>
-          </div>
-        ))}
-      </div>
+      
+
     </div>
   );
 };
+
+
 
 export default HomePage;
